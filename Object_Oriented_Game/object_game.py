@@ -98,11 +98,14 @@ class Game() :
           "It smells of plastic."),
     ]
   
+  # Runs main game loop
   def take_turn(self) :
 
     prompt = self.get_room_prompt()
-    selection = input(prompt)
+    selection = int(input(prompt))
+    self.select_object(selection - 1)
   
+  # Return a prompt string asking the user to enter the escape code or select/interact with one of the game objects 
   def get_room_prompt(self) :
 
     prompt = "Enter the 3 digit lock code or choose an item to interact with:\n"
@@ -114,8 +117,18 @@ class Game() :
       index += 1
 
     return prompt
-  
 
+  # Allows the user to select a chosen object
+  def select_object(self, index) :
+    selected_object = self.room.game_objects[index]
+    prompt = self.get_object_interaction_string(selected_object.name)
+    interaction = input(prompt)
+    return
+  
+  # Returns a prompt string asking the user which action they want to do on the object
+  def get_object_interaction_string(self, name) :
+    return f"How do you want to interact with the {name} ?\n1: Look\n2: Touch\n3: Smell\n"
+  
 game = Game()
 
 game.take_turn()
