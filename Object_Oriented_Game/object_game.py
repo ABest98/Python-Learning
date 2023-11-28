@@ -113,7 +113,7 @@ class Game() :
         print("Congratulations, you win!")
       else :
         if self.attempts == 3 :
-          print("Game over, you ran out of guess. Better luck next time!")
+          print("Game over, you ran out of guesses. Better luck next time!")
         else :
           print(f"Incorrect, you have used {self.attempts}/3 attempts.\n")
           # Using recursion
