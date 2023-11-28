@@ -103,8 +103,22 @@ class Game() :
 
     prompt = self.get_room_prompt()
     selection = int(input(prompt))
-    self.select_object(selection - 1)
-  
+    if selection >= 1 and selection <= 5 :
+      self.select_object(selection - 1)
+      # Using recursion
+      self.take_turn()
+    else :
+      is_code_correct = self.guess_code(selection)
+      if is_code_correct :
+        print("Congratulations, you win!")
+      else :
+        if self.attempts == 3 :
+          print("Game over, you ran out of guess. Better luck next time!")
+        else :
+          print(f"Incorrect, you have used {self.attempts}/3 attempts.\n")
+          # Using recursion
+          self.take_turn()
+
   # Return a prompt string asking the user to enter the escape code or select/interact with one of the game objects 
   def get_room_prompt(self) :
 
@@ -120,15 +134,38 @@ class Game() :
 
   # Allows the user to select a chosen object
   def select_object(self, index) :
+
     selected_object = self.room.game_objects[index]
     prompt = self.get_object_interaction_string(selected_object.name)
     interaction = input(prompt)
-    return
+    clue = self.interact_with_object(selected_object, interaction)
+    print(clue)
   
   # Returns a prompt string asking the user which action they want to do on the object
   def get_object_interaction_string(self, name) :
+
     return f"How do you want to interact with the {name} ?\n1: Look\n2: Touch\n3: Smell\n"
   
+  # Returns selected interaction with an object
+  def interact_with_object(self, object, interaction) :
+
+    if interaction == "1" :
+      return object.look()
+    elif interaction == "2" :
+      return object.touch()
+    elif interaction == "3" :
+      return object.sniff()
+    else :
+      return
+  
+  def guess_code(self, code) :
+
+    if self.room.check_code(code) :
+      return True
+    else :
+      self.attempts += 1
+      return False
+
 game = Game()
 
 game.take_turn()
